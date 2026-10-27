@@ -12,18 +12,19 @@
     "smoke": "node scripts/smoke.mjs"
   },
   "dependencies": {
+    "@supabase/supabase-js": "^2.49.0",
     "next": "^15.5.28",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
-    "@supabase/supabase-js": "^2.49.0",
     "zod": "^4.6.7"
   },
   "devDependencies": {
-    "typescript": "^5.8.0",
+    "@electric-sql/pglite": "^0.5.12",
     "@types/node": "^22.0",
     "@types/react": "^19.0",
     "@types/react-dom": "^19.0",
-    "tsx": "^4.20.0"
+    "tsx": "^4.20.0",
+    "typescript": "^5.8.0"
   },
   "overrides": {
     "postcss": "^8.5.32"

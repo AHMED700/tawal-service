@@ -48,14 +48,22 @@ Bilingual blue/teal company report, school details, each AC's issue/result/parts
 ## Tech and delivery
 Existing prototypes use Next.js, Supabase PostgreSQL/Auth/RLS. Enforce permissions server-side and with RLS, validate all public inputs, use atomic state transitions, never commit .env or credentials.
 Repository: AHMED700/tawal-service.
-Codex must first inspect repo and any provided ZIP before modifying. Latest ZIP actually supplied by user in conversation: tawal-service-v11(1).zip. Earlier V12 was mentioned in chat but may not be present in repository. Do not claim it is uploaded.
-At last inspection repository contained only README.md. This context file does NOT mean application code is uploaded.
+Codex must first inspect repo and any provided ZIP before modifying. Source ZIP inspected and used in this session: tawal-service-v11.zip. Earlier V12 was mentioned in chat but may not be present in repository. Do not claim it is uploaded.
+Current repository contains the V13 application source, uploaded from the supplied V11 archive. Earlier README-only observations are historical; verify the actual file tree before future changes.
 Do not deploy, configure production DB or expose credentials without explicit user approval.
 
+## Current implementation and verification
+- V13 source is present: school form, staff login/dashboard, reports, API routes and SQL migrations.
+- Follow-up work is on `codex/v13-workflow-validation`, separate from main. Keep interfaces simple.
+- Local tests now use an in-memory PostgreSQL engine with test-only auth identity stubs to check RPC workflow and RLS. This does not validate hosted Supabase authentication or real Turnstile.
+- A local regression test found that visits could finish with unresolved AC outcomes. Migration 009 requires a result or follow-up reason for each AC; the UI warns and blocks finishing until all results are saved.
+- Migration 009 is prepared and tested locally only. Do not apply it to a real database without owner approval.
+- The school form and server share eight allowed issue types. Closed tickets are hidden from the default active queue and remain available through filters.
+
 ## Next steps
-1. Obtain/inspect source ZIP; upload source to a branch/repo excluding secrets.
+1. Source ZIP inspection and V13 source upload are complete. Push follow-up changes only to the requested independent branch, excluding secrets.
 2. Install dependencies, run build and checks; fix errors without expanding scope.
-3. Apply DB migrations to a TEST Supabase project, validate auth/RLS and all workflows.
+3. After owner approval and secure configuration, apply pending migrations to a TEST Supabase project and validate actual authentication/RLS and workflows. Local PostgreSQL tests are an additional check, not a substitute.
 4. Test mobile school submission, duplicates/ASCII digits, leader timers, follow-up, admin closure, reports.
 5. Only then prepare deployment and pilot rollout.
 

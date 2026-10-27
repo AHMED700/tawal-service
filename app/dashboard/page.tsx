@@ -56,7 +56,7 @@ const unitStatuses: Record<string, string> = {
 export default function Dashboard() {
   const [returnReason, setReturnReason] = useState(''),
     [query, setQuery] = useState(''),
-    [statusFilter, setStatusFilter] = useState('all');
+    [statusFilter, setStatusFilter] = useState('open');
   const [dirtyUnits, setDirtyUnits] = useState<Record<string, boolean>>({});
   const markDirty = useCallback(
     (id: string, dirty: boolean) =>
@@ -165,7 +165,10 @@ export default function Dashboard() {
   const chosen = tickets.find((t) => t.id === selected);
   const visible = tickets.filter(
     (t) =>
-      (statusFilter === 'all' || t.status === statusFilter) &&
+      (statusFilter === 'all' ||
+        (statusFilter === 'open'
+          ? t.status !== 'closed'
+          : t.status === statusFilter)) &&
       (leaderFilter === 'all' ||
         (leaderFilter === 'unassigned'
           ? !t.assigned_leader_id
@@ -177,6 +180,11 @@ export default function Dashboard() {
   );
   const visits = sessions.filter((s) => s.ticket_id === selected);
   const active = visits.find((s) => !s.ended_at);
+  const missingOutcomes = chosen?.ticket_units.some(
+    (u) =>
+      ['pending', 'in_progress'].includes(u.status) ||
+      (u.status === 'pending_follow_up' && !u.follow_up_reason),
+  );
   const seconds = visits.reduce((n, s) => n + (s.duration_seconds || 0), 0);
   const fmt = (n: number) =>
     `${Math.floor(n / 3600)} ساعة و${Math.floor((n % 3600) / 60)} دقيقة`;
@@ -260,7 +268,8 @@ export default function Dashboard() {
             value={statusFilter}
             onChange={(e) => setStatusFilter(e.target.value)}
           >
-            <option value="all">كل الحالات</option>
+            <option value="open">البلاغات المفتوحة</option>
+            <option value="all">كل الحالات مع الأرشيف</option>
             {Object.entries(statuses).map(([key, label]) => (
               <option key={key} value={key}>
                 {label}
@@ -413,9 +422,15 @@ export default function Dashboard() {
                   بدأ التنفيذ — وصلت إلى المدرسة
                 </button>
               )}
+            {role === 'leader' && active && missingOutcomes && (
+              <p className="note" role="status">
+                سجّل نتيجة كل مكيف: تم الإصلاح أو الاستبدال، أو يحتاج متابعة مع
+                تحديد السبب، ثم احفظ قبل إنهاء الزيارة.
+              </p>
+            )}
             {role === 'leader' && active && (
               <button
-                disabled={busy || hasDrafts}
+                disabled={busy || hasDrafts || missingOutcomes}
                 onClick={() => {
                   if (
                     confirm(

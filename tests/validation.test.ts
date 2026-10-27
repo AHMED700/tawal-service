@@ -1,5 +1,6 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
+import { ISSUE_TYPES } from '../lib/issues';
 import { ticketSchema } from '../lib/schema';
 import { POST } from '../app/api/tickets/route';
 import { GET } from '../app/api/staff/tickets/route';
@@ -7,7 +8,7 @@ import { PATCH } from '../app/api/staff/tickets/[id]/route';
 import schools from '../lib/schools.json';
 const unit = {
   acNumber: '007',
-  problemType: 'تبريد ضعيف',
+  problemType: ISSUE_TYPES[1],
   location: 'الفصل 1',
 };
 const ticket = {
@@ -118,4 +119,21 @@ test('Turnstile rejects invalid tokens, hostname mismatch and action mismatch', 
       else process.env[n] = old[i];
     });
   }
+});
+
+test('all eight configured issue types pass and unknown types are rejected', () => {
+  assert.equal(ISSUE_TYPES.length, 8);
+  for (const problemType of ISSUE_TYPES)
+    assert.equal(
+      ticketSchema.safeParse({ ...ticket, units: [{ ...unit, problemType }] })
+        .success,
+      true,
+    );
+  assert.equal(
+    ticketSchema.safeParse({
+      ...ticket,
+      units: [{ ...unit, problemType: 'نوع غير معتمد' }],
+    }).success,
+    false,
+  );
 });

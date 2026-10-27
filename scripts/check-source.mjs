@@ -6,6 +6,7 @@ const page = read('app/page.tsx');
 assert.match(page, /^'use client';/, 'Next.js client directive must be first');
 assert.match(read('app/reports/[id]/page.tsx'), /^'use client';/);
 assert.ok(existsSync(new URL('supabase/008_review_events_access.sql', root)));
+assert.ok(existsSync(new URL('supabase/009_require_visit_outcomes.sql', root)));
 const schools = JSON.parse(read('lib/schools.json'));
 assert.equal(schools.length, 34, 'Expected 34 schools');
 assert.equal(schools.filter((s) => s.city === 'Saham').length, 20);
@@ -36,5 +37,5 @@ for (let i = 1; i <= 7; i++)
   );
 assert.match(read('lib/schema.ts'), /acNumber/);
 console.log(
-  'Source checks passed: client directive, 34 schools, 8 migrations, AC schema.',
+  'Source checks passed: client directive, 34 schools, 9 migrations, AC schema.',
 );

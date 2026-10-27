@@ -1,9 +1,10 @@
 import { z } from 'zod';
+import { ISSUE_TYPES } from './issues';
 export const unitSchema = z.object({
   acNumber: z
     .string()
     .regex(/^[0-9]{1,3}$/, 'رقم المكيف يجب أن يتكون من 1 إلى 3 أرقام إنجليزية'),
-  problemType: z.string().trim().min(1).max(100),
+  problemType: z.enum(ISSUE_TYPES),
   location: z.string().trim().min(1).max(120),
   notes: z.string().max(500).optional().default(''),
 });

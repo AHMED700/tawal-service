@@ -1,4 +1,5 @@
 'use client';
+import { ISSUE_TYPES } from '../lib/issues';
 import { Turnstile } from '../components/turnstile';
 import schools from '../lib/schools.json';
 import { useState } from 'react';
@@ -240,16 +241,7 @@ export default function Home() {
                     }
                   >
                     <option value="">اختر نوع العطل</option>
-                    {[
-                      'لا يعمل | Not Working',
-                      'تبريد ضعيف | Poor Cooling',
-                      'تسريب ماء | Water Leakage',
-                      'صوت غير طبيعي | Unusual Noise',
-                      'يفصل أثناء التشغيل | Shuts Off',
-                      'تكوّن الثلج | Icing',
-                      'رائحة غير طبيعية | Bad Smell',
-                      'أخرى | Other',
-                    ].map((v) => (
+                    {ISSUE_TYPES.map((v) => (
                       <option key={v}>{v}</option>
                     ))}
                   </select>

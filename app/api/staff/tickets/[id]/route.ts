@@ -88,7 +88,7 @@ export async function PATCH(
               : {},
     });
     if (error) {
-      console.error('staff_ticket_action:', error.message);
+      console.error('Staff ticket action rejected');
       return failure('لم تنفذ العملية؛ تحقق من حالة البلاغ وصلاحياتك', 409);
     }
     return NextResponse.json({ ok: true, result: data });
