@@ -1,0 +1,24 @@
+name: Validate V13
+on: [push, pull_request]
+permissions:
+  contents: read
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+      - run: npm ci
+      - run: npm run check:source
+      - run: npm test
+      - run: npm run build
+      - run: npm run typecheck
+      - name: Local HTTP smoke test
+        run: |
+          npm start -- --hostname 127.0.0.1 --port 3000 > /tmp/tawal-ci.log 2>&1 &
+          tawal_pid=$!
+          trap 'kill "$tawal_pid"' EXIT
+          npm run smoke
