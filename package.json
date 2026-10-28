@@ -8,8 +8,10 @@
     "start": "next start",
     "check:source": "node scripts/check-source.mjs",
     "typecheck": "tsc --noEmit",
-    "test": "tsx --test tests/*.test.ts",
-    "smoke": "node scripts/smoke.mjs"
+    "test": "tsx --test tests/*.test.ts tests/*.test.mts",
+    "smoke": "node scripts/smoke.mjs",
+    "db:status": "node --use-env-proxy scripts/setup-supabase.mjs",
+    "db:setup": "node --use-env-proxy scripts/setup-supabase.mjs --apply"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.49.0",

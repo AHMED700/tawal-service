@@ -69,3 +69,10 @@ Do not deploy, configure production DB or expose credentials without explicit us
 
 ## Communication
 Explain progress in Arabic, clearly distinguish coded, tested, and deployed. Keep instructions nontechnical and brief for the owner.
+
+## Continuation — 2026-10-28
+- Owner authorized completion and initialization of selected Supabase project `uhbxrnvlkrgsnonkajzy`. Do not ask for repeated migration approval for this approved setup.
+- Hosted read-only checks confirmed the four core tables now exist after the owner ran the short schema block. The remaining visit/directory tables and application RPCs were still absent at the last check. The server key works; the stored public anon key is rejected. Turnstile is not configured.
+- Added `npm run db:status` (read-only) and `npm run db:setup` (explicit apply), restricted to the selected project. The runner handles original migrations, separate enum commit, checksums, transactions, protected journal, and safe recovery from the approved empty core schema.
+- Missing prerequisite: securely bound `SUPABASE_ACCESS_TOKEN` with management SQL access scoped to this project. Requirement and API destination were saved in the Codex environment draft; no token value is in code or chat. A service-role key cannot execute arbitrary SQL.
+- This tool has local PostgreSQL and transport tests; hosted execution is not verified until that credential is available. Do not report setup complete or a site deployed. Preserve real data and inspect unsupported partial schemas instead of resetting them.
